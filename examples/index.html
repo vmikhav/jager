@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jager example</title>
+  <style type="text/css">
+    html, body{
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: hidden;
+    }
+
+    .top{
+      height: 25px;
+      width: 100%;
+      line-height: 25px;
+    }
+
+    #gcanvas{
+      width: 100%;
+      height: calc(100% - 25px);
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="top">
+    Current gesture: <span id="gname">none</span>
+  </div>  
+
+  <canvas id="gcanvas"></canvas>
+
+<script type="text/javascript" src="../jager.js"></script>
+
+<script type="text/javascript">
+
+  var jager = new Jager();
+
+  var gestureNames = [
+    'none', 'click', 'horizontal', 'vertical',
+    '^', 'v', '>', '<',
+    'pigtail', 'lightning', 'swypeTDrLTr'
+  ];
+
+  var gname   = document.getElementById('gname');
+  var gcanvas = document.getElementById('gcanvas');
+  var gctx = gcanvas.getContext('2d');
+  var mouseIsDown = false;
+  var path = [];
+
+  function onResize(){
+    gcanvas.width  = gcanvas.scrollWidth;
+    gcanvas.height = gcanvas.scrollHeight;
+  }
+
+  function gestureStart(evt){
+      mouseIsDown = true;
+      path = [jager.point(evt)];
+      evt.preventDefault();
+      return false;
+  }
+
+  function gestureMove(evt){
+    if (mouseIsDown){
+      path.push(jager.point(evt));
+      evt.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+  function gestureEnd(evt){
+    var gesture;
+    if (mouseIsDown){
+      mouseIsDown = false;
+
+      gesture = jager.recognite(path, 20, true);
+      gname.innerHTML = gestureNames[gesture];
+      //gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
+
+      return false;
+    }
+    return true;
+  }
+
+  function tick(){
+
+    if (mouseIsDown){
+      gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
+      jager.drawPatch(path, gctx, jager.recognite(path));
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener("orientationchange", onResize);
+  window.addEventListener("resize", onResize);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) {onResize();}}, false);
+
+  gcanvas.addEventListener('mousedown',  gestureStart);
+  gcanvas.addEventListener('mousemove',  gestureMove);
+  gcanvas.addEventListener('mouseup',    gestureEnd);
+  gcanvas.addEventListener('mouseout',   gestureEnd);
+
+  gcanvas.addEventListener('touchstart', gestureStart);
+  gcanvas.addEventListener('touchmove',  gestureMove);
+  gcanvas.addEventListener('touchend',   gestureEnd);
+
+  onResize();
+  tick();
+
+</script>
+</body>
+</html>
