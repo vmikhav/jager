@@ -101,7 +101,7 @@ Recognizes the painted gesture.
 Draw `path` in given `ctx` with `gesture` color.
 * **path**: `Array of points` Pointer path.
 * **ctx**: `Context` Canvas context.
-* **gesture**: `Number` `optional` Gesture number Used to determine the color of the line.
+* **gesture**: `Number` `optional` Gesture number. Used to determine the color of the line.
 
 ## License
 This software is licensed under the [MIT](https://github.com/vmikhav/jager/blob/master/LICENSE) © [vmikhav](https://github.com/vmikhav)

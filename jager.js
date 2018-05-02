@@ -149,7 +149,7 @@
           && Math.abs(orients[0].y + orients[1].y) == 2
           && (Math.abs(orients[0].rx) + Math.abs(orients[1].rx)) < 0.4)
         {
-          result = gestures.swypeTD;
+          result = this.gestures.swypeTD;
         }
         else if ((ol == 2 || ol == 3)
           && orients[0].y == -orients[ol - 1].y 
