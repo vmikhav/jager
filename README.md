@@ -3,6 +3,7 @@ Jager is an library for touch gesture recognition.
 
 ### Features
 * Simple API
+* Fast recognition (around 0.1 ms)
 * Recognition on-the-fly
 * No outside dependencies, just pure JavaScript
 
