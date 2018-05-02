@@ -36,7 +36,7 @@ var jager = new Jager();
 var gesture = jager.recognise(path);
 ```
 
-Also you can see this [demo page](./docs/index.html).
+Also you can see this [demo page](https://vmikhav.github.io/jager/examples/index.html).
 
 ### Options
 #### gestures
