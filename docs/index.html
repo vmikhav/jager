@@ -75,7 +75,7 @@
     if (mouseIsDown){
       mouseIsDown = false;
 
-      gesture = jager.recognite(path, 20, true);
+      gesture = jager.recognise(path, 20, true);
       gname.innerHTML = gestureNames[gesture];
       //gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
 
@@ -88,7 +88,7 @@
 
     if (mouseIsDown){
       gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
-      jager.drawPatch(path, gctx, jager.recognite(path));
+      jager.drawPatch(path, gctx, jager.recognise(path));
     }
 
     requestAnimationFrame(tick);

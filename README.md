@@ -33,10 +33,10 @@ In the browser:
 ```javascript
 var jager = new Jager();
 
-var gesture = jager.recognite(path);
+var gesture = jager.recognise(path);
 ```
 
-Also you can see this [demo page](./examples/index.html).
+Also you can see this [demo page](./docs/index.html).
 
 ### Options
 #### gestures
@@ -91,7 +91,7 @@ Array of gesture patterns. Pattern contain the following fields:
 Extract point object from the event data.
 * **evt**: Event parameter.
 
-#### recognite(path[, tolerance[, debug]])
+#### recognise(path[, tolerance[, debug]])
 Recognizes the painted gesture.
 * **path**: `Array of points` Pointer path.
 * **tolarence**: `Number` `optional` Tolerance of the path approximator. Bigger tolerance - shorter approximate path. Default 20.

@@ -106,11 +106,11 @@
       return result;
     }
 
-    recognite(path, tolerance = 20, debug = false){
-      return this.cogniteGesture(this.simplifyPath(path, tolerance), debug);
+    recognise(path, tolerance = 20, debug = false){
+      return this.recogniseGesture(this.simplifyPath(path, tolerance), debug);
     }
 
-    cogniteGesture(path, debug = false){
+    recogniseGesture(path, debug = false){
       let i, j, k, l, ol, result = 0;
       let orients = [];
       if (path.length == 2){
