@@ -24,10 +24,10 @@
   </style>
 </head>
 <body>
-  
+
   <div class="top">
     Current gesture: <span id="gname">none</span>
-  </div>  
+  </div>
 
   <canvas id="gcanvas"></canvas>
 
@@ -40,7 +40,7 @@
   var gestureNames = [
     'none', 'click', 'horizontal', 'vertical',
     '^', 'v', '>', '<',
-    'pigtail', 'lightning', 'swypeTDrLTr'
+    'pigtail', 'reverse pigtail', 'lightning', 'circle'
   ];
 
   var gname   = document.getElementById('gname');
@@ -75,7 +75,7 @@
     if (mouseIsDown){
       mouseIsDown = false;
 
-      gesture = jager.recognise(path, 20, true);
+      gesture = jager.recognise(path, 5000, true);
       gname.innerHTML = gestureNames[gesture];
       //gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
 
