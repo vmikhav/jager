@@ -37,17 +37,11 @@
 
   var jager = new Jager();
 
-  var gestureNames = [
-    'none', 'click', 'horizontal', 'vertical',
-    '^', 'v', '>', '<',
-    'pigtail', 'reverse pigtail', 'lightning', 'circle'
-  ];
 
   var gname   = document.getElementById('gname');
   var gcanvas = document.getElementById('gcanvas');
   var gctx = gcanvas.getContext('2d');
   var mouseIsDown = false;
-  var path = [];
 
   function onResize(){
     gcanvas.width  = gcanvas.scrollWidth;
@@ -56,14 +50,15 @@
 
   function gestureStart(evt){
       mouseIsDown = true;
-      path = [jager.point(evt)];
+      gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
+      jager.pushPoint(jager.point(evt));
       evt.preventDefault();
       return false;
   }
 
   function gestureMove(evt){
     if (mouseIsDown){
-      path.push(jager.point(evt));
+      jager.addPoint(jager.point(evt));
       evt.preventDefault();
       return false;
     }
@@ -71,13 +66,12 @@
   }
 
   function gestureEnd(evt){
-    var gesture;
     if (mouseIsDown){
       mouseIsDown = false;
 
-      gesture = jager.recognise(path, 5000, true);
-      gname.innerHTML = gestureNames[gesture];
-      //gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
+      jager.pushPoint(jager.point(evt));
+      const symbol = jager.recognise(true);
+      gname.innerHTML = symbol.name || 'none';
 
       return false;
     }
@@ -88,7 +82,7 @@
 
     if (mouseIsDown){
       gctx.clearRect(0, 0, gcanvas.scrollWidth, gcanvas.scrollHeight);
-      jager.drawPatch(path, gctx, jager.recognise(path));
+      jager.drawPatch(gctx);
     }
 
     requestAnimationFrame(tick);

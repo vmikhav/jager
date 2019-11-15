@@ -1,9 +1,9 @@
 # Description
-Jager is an library for touch gesture recognition.
+Jager is an library for touch gesture / symbols recognition.
 
 ### Features
 * Simple API
-* Fast recognition (around 0.1 ms)
+* Fast recognition (around 0.2 ms)
 * Recognition on-the-fly
 * No outside dependencies, just pure JavaScript
 
@@ -32,78 +32,66 @@ In the browser:
 ### Examples
 
 ```javascript
-var jager = new Jager();
-
-var gesture = jager.recognise(path);
+const jager = new Jager();
+jager.addPoint({x, y});
+let gesture = jager.recognise();
 ```
 
 Also you can see this [demo page](https://vmikhav.github.io/jager/examples/index.html).
 
 ### Options
-#### gestures
-Object with gesture codes
+#### path
+Array of points (x, y) for recognition
+
+#### symbols
+Object with symbols enumeration
 ```javascript
-gestures = {
-  unknown: 0,
-  click:   1,
-  swipeLR: 2,
-  swipeTD: 3,
-  swipeDTD: 4,
-  swipeTDT: 5,
-  swipeLRL: 6,
-  swipeRLR: 7,
-  pigtail: 8,
-  pigtail_reverse: 9,
-  lightning: 10,
-  circle: 11,
-};
+if (jager.recognise() === jager.symbols['pigtail']) { }
 ```
 
-#### gestureColors
-Array of gestures colors. Contains color names or HEX codes (string).
-
-#### gesturesRules
-Array of gesture patterns. Pattern contain the following fields:
-(Angles are measured in degrees)
-* **gesture**: `Number` Gesture code.
-* **startAngle**: `[Number, Number]` Allowed start angle diapason.
-* **endAngle**: `[Number, Number]` Allowed end angle diapason.
-* **terminatorForce**: `[Number, Number]` Allowed start/end line to control line ratio.
-* **distanceX**: `[Number, Number]|null` Allowed distance between start and end point (x-axis).
-* **distanceY**: `[Number, Number]|null` Allowed distance between start and end point (y-axis).
-* **points**: `Array` Rules for internal points. Each rule contain the following elements:
-	* **angle** `[Number, Number]` Allowed angle.
-	* **force** `[[Number, Number], [Number, Number]]` Allowed line to control line ratio.
+#### symbolsRules
+Array of symbol patterns. Pattern contain the following fields:
+* **symbol**: `{name, index}` Symbol info.
+* **sections**: `Array` Rules for path sections. Each rule contain the following elements:
+	* **x** `-1|0|1` Section orientation in X line. Should be `0` if `y` is not `0`.
+	* **y** `-1|0|1` Section orientation in Y line. Should be `0` if `x` is not `0`.
+	* **skip** `bool` *Optional* If `true`, this section can be skipped in mismatch case.
+* **quarters**: `function (sX, sY, eX, eY)` Callback function to check start and end point positions. Each param is in integer range `[0, 3]` (top-left corner is (0, 0), bottom-right is (3, 3)).
 ```javascript
 {
-  gesture: this.gestures.pigtail,
-  startAngle: [-60, 40],
-  endAngle: [155, 240],
-  terminatorForce: [0, 0.75],
-  distanceX: null,
-  distanceY: null,
-  points: [
-    {angle: [125, 200], force: [[0.1, 0.5], [0, 0.5]]}
-  ],
-},
+  symbol: this.symbols['circle'],
+  sections: [{x: -1, y: 0, skip: true}, {x: 0, y: 1}, {x: 1, y: 0}, {x: 0, y: -1}, {x: -1, y: 0}],
+  quarters: function (sX, sY, eX, eY) {
+    return sY === 0 && eY === 0 && Math.abs(sX - eX) <= 1 && sX <= 2;
+  }
+}
 ```
 
 ### Methods
+#### reset()
+Reset current path.
+
 #### point(evt)
 Extract point object from the event data.
 * **evt**: Event parameter.
 
-#### recognise(path[, tolerance[, debug]])
-Recognizes the painted gesture.
-* **path**: `Array of points` Pointer path.
-* **tolarence**: `Number` `optional` Tolerance of the path approximator. Bigger tolerance - shorter approximate path. Default 5000.
-* **debug**: `Bool` `optional` If true jager logging the gesture section.
+#### pushPoint(point)
+Add point to current path without changes.
+* **point**: Point object, contains `x` and `y`.
 
-#### drawPatch(path, ctx[, gesture])
-Draw `path` in given `ctx` with `gesture` color.
-* **path**: `Array of points` Pointer path.
+#### addPoint(point[, distanceFilter[, smoothFactor]])
+Add point to current path with smoothing.
+* **point**: Point object, contains `x` and `y`.
+* **distanceFilter**: Ignore point if squared distance to previous point is less than `distanceFilter`.
+* **smoothFactor**: How smooth will be current path. Decimal in `[0, 1)`.
+
+#### recognise([debug])
+Recognizes the painted gesture.
+* **debug**: `Bool` `optional` If true jager logging the symbol info.
+
+#### drawPatch(ctx)
+Draw current path in given `ctx`.
 * **ctx**: `Context` Canvas context.
-* **gesture**: `Number` `optional` Gesture number. Used to determine the color of the line.
 
 ## License
 This software is licensed under the [MIT](https://github.com/vmikhav/jager/blob/master/LICENSE) © [vmikhav](https://github.com/vmikhav)
