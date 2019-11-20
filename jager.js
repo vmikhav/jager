@@ -106,11 +106,49 @@
             return eY >= 2 && eX === 3 && sX === 0;
           }
         },
+
+        {
+          symbol: this.symbols['<'],
+          sections: [{x: -1, y: 0}, {x: 0, y: 1, skip: true}, {x: 1, y: 0}],
+          quarters: function (sX, sY, eX, eY) {
+            return sX >= 2 && eX >= 3 && sY === 0 && eY === 3;
+          }
+        },
+        {
+          symbol: this.symbols['<'],
+          sections: [{x: 1, y: 0}, {x: 0, y: -1, skip: true}, {x: -1, y: 0}],
+          quarters: function (sX, sY, eX, eY) {
+            return sX >= 3 && eX >= 3 && sY === 3 && eY === 0;
+          }
+        },
+
+        {
+          symbol: this.symbols['>'],
+          sections: [{x: 1, y: 0}, {x: 0, y: 1, skip: true}, {x: -1, y: 0}, {x: 0, y: 1, skip: true}],
+          quarters: function (sX, sY, eX, eY) {
+            return sX <= 1 && eX <= 1 && sY === 0 && eY === 3;
+          }
+        },
+        {
+          symbol: this.symbols['>'],
+          sections: [{x: 1, y: 0}, {x: 0, y: 1}],
+          quarters: function (sX, sY, eX, eY) {
+            return sX <= 1 && eX <= 1 && sY === 0 && eY === 3;
+          }
+        },
+        {
+          symbol: this.symbols['>'],
+          sections: [{x: -1, y: 0}, {x: 0, y: -1, skip: true}, {x: 1, y: 0}],
+          quarters: function (sX, sY, eX, eY) {
+            return sX <= 1 && eX <= 1 && sY === 3 && eY === 0;
+          }
+        },
+
         {
           symbol: this.symbols['lighting'],
           sections: [{x: 0, y: 1}, {x: 1, y: 0}, {x: 0, y: 1}],
           quarters: function (sX, sY, eX, eY) {
-            return sY === 0 && eY === 3 && sX >= eX && sX >= 1 && eX < 3;
+            return sY === 0 && eY === 3 && eX >= 1;
           }
         },
         {
@@ -142,14 +180,14 @@
         },
         {// left-right
           symbol: this.symbols['circle'],
-          sections: [{x: -1, y: 0, skip: true}, {x: 0, y: 1}, {x: 1, y: 0}, {x: 0, y: -1}, {x: -1, y: 0}],
+          sections: [{x: -1, y: 0, skip: true}, {x: 0, y: 1}, {x: 1, y: 0}, {x: 0, y: -1}, {x: -1, y: 0, skip: true}],
           quarters: function (sX, sY, eX, eY) {
             return sY === 0 && eY === 0 && Math.abs(sX - eX) <= 1 && sX <= 2;
           }
         },
         {// right-left
           symbol: this.symbols['circle'],
-          sections: [{x: 1, y: 0, skip: true}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}, {x: 1, y: 0}],
+          sections: [{x: 1, y: 0, skip: true}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}, {x: 1, y: 0, skip: true}],
           quarters: function (sX, sY, eX, eY) {
             return sY === 0 && eY === 0 && Math.abs(sX - eX) <= 1 && sX >= 1;
           }
@@ -266,7 +304,9 @@
 
       if (Math.pow(Math.abs(oldP.x - newP.x), 2) + Math.pow(Math.abs(oldP.y - newP.y), 2) > distanceFilter) {
         this.path.push(newP);
+        return [oldP, newP];
       }
+      return null;
     }
 
     calcQuarters(minX, minY, maxX, maxY, startX, startY, endX, endY) {
