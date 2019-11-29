@@ -7,6 +7,11 @@ Jager is an library for touch gesture / symbols recognition.
 * Recognition on-the-fly
 * No outside dependencies, just pure JavaScript
 
+### Usage
+Library is used in next projects:
+* [Keep your sheep](https://vmikhav.itch.io/keep-your-sheep)
+* [AntiPacMan](https://vmikhav.itch.io/antipacman)
+
 # Documentation
 
 ### Contents
@@ -34,7 +39,7 @@ In the browser:
 ```javascript
 const jager = new Jager();
 jager.addPoint({x, y});
-let gesture = jager.recognise();
+let symbols = jager.recognise();
 ```
 
 Also you can see this [demo page](https://vmikhav.github.io/jager/examples/index.html).
