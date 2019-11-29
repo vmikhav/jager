@@ -97,9 +97,22 @@
   gcanvas.addEventListener('mouseup',    gestureEnd);
   gcanvas.addEventListener('mouseout',   gestureEnd);
 
-  gcanvas.addEventListener('touchstart', gestureStart);
-  gcanvas.addEventListener('touchmove',  gestureMove);
-  gcanvas.addEventListener('touchend',   gestureEnd);
+  var lastEvt = null;
+  function convertEvent(evt) {
+    if (evt.touches.length) {
+      evt.x = evt.touches[0].clientX;
+      evt.y = evt.touches[0].clientY;
+      lastEvt = evt;
+    } else {
+      evt.x = lastEvt.touches[0].clientX;
+      evt.y = lastEvt.touches[0].clientY;
+    }
+    return evt;
+  }
+
+  gcanvas.addEventListener('touchstart', evt => gestureStart(convertEvent(evt)));
+  gcanvas.addEventListener('touchmove',  evt => gestureMove(convertEvent(evt)));
+  gcanvas.addEventListener('touchend',   evt => gestureEnd(convertEvent(evt)));
 
   onResize();
   tick();
