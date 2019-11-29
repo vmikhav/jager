@@ -70,8 +70,8 @@
       mouseIsDown = false;
 
       jager.pushPoint(jager.point(evt));
-      const symbol = jager.recognise(true);
-      gname.innerHTML = symbol.name || 'none';
+      const symbols = jager.recognise(true);
+      gname.innerHTML = symbols[0].name || 'none';
 
       return false;
     }
